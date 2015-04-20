@@ -59,6 +59,6 @@ sleep 1
 fi
 done
 `
-[ -f /var/run/x11vnc.pid ] || start-stop-daemon --start --background --pidfile /var/run/x11vnc.pid --background --exec /usr/bin/x11vnc -- -id $window_id -forever -display :0 -passwdfile /home/$USER_NAME/.vncpass
-[ -f /var/run/noVNC.pid ] || start-stop-daemon --start --quiet --pidfile /var/run/noVNC.pid --background --exec /noVNC/utils/launch.sh
+pidof /usr/bin/Xvfb || start-stop-daemon --start --background --pidfile /var/run/x11vnc.pid --background --exec /usr/bin/x11vnc -- -id $window_id -forever -display :0 -passwdfile /home/$USER_NAME/.vncpass
+ps aux | grep -q "/noVNC/utils/launch.sh" || start-stop-daemon --start --quiet --pidfile /var/run/noVNC.pid --background --exec /noVNC/utils/launch.sh
 exec /usr/sbin/sshd -D

@@ -7,7 +7,7 @@ RUN apt-get install -y wget openssh-server net-tools unzip aria2 sudo vim
 RUN apt-get install -y --no-install-recommends x11vnc xvfb libncurses5:i386 libstdc++6:i386 openjdk-7-jdk ia32-libs ia32-libs-multiarch git ssh
 
 # Main Android SDK
-RUN cd /opt && aria2c -q http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz && aria2c https://dl-ssl.google.com/android/repository/sysimg_armv7a-17_r02.zip
+RUN cd /opt && aria2c -q http://dl.google.com/android/android-sdk_r23.0.2-linux.tgz && (aria2c https://dl-ssl.google.com/android/repository/sysimg_armv7a-17_r02.zip aria2c || aria2c http://ghaffarian.net/downloads/Android/offline/sysimg_armv7a-17_r02.zip)
 RUN cd /opt && tar xzf android-sdk_r23.0.2-linux.tgz
 RUN cd /opt && rm -f android-sdk_r23.0.2-linux.tgz
 
