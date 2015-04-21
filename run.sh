@@ -43,8 +43,8 @@ initialize
 fi
 
 export DISPLAY=:0
-[ -f /var/run/Xvfb.pid ] || start-stop-daemon --start --background --pidfile /var/run/Xvfb.pid --background --exec /usr/bin/Xvfb -- :0 -extension GLX -screen 0 480x800x24
-[ -f /var/run/emulator-arm.pid ] || start-stop-daemon --start --background --pidfile /var/run/emulator-arm.pid --background --exec ${ANDROID_HOME}/tools/emulator-arm -- -avd test -no-skin -no-audio -port 5554
+pidof /usr/bin/Xvfb || start-stop-daemon --start --background --pidfile /var/run/Xvfb.pid --background --exec /usr/bin/Xvfb -- :0 -extension GLX -screen 0 480x800x24
+pidof ${ANDROID_HOME}/tools/emulator-arm || start-stop-daemon --start --background --pidfile /var/run/emulator-arm.pid --background --exec ${ANDROID_HOME}/tools/emulator-arm -- -avd test -no-skin -no-audio -port 5554
 [ -n "$LANG" ] && locale-gen "$LANG"
 died_time=$(expr $(date +%s) + 10 )
 window_id=`while [ $(date +%s) -lt $died_time ]
@@ -59,6 +59,7 @@ sleep 1
 fi
 done
 `
-pidof /usr/bin/Xvfb || start-stop-daemon --start --background --pidfile /var/run/x11vnc.pid --background --exec /usr/bin/x11vnc -- -id $window_id -forever -display :0 -passwdfile /home/$USER_NAME/.vncpass
-ps aux | grep -q "/noVNC/utils/launch.sh" || start-stop-daemon --start --quiet --pidfile /var/run/noVNC.pid --background --exec /noVNC/utils/launch.sh
+pidof /usr/bin/x11vnc || start-stop-daemon --start --background --pidfile /var/run/x11vnc.pid --background --exec /usr/bin/x11vnc -- -id $window_id -forever -display :0 -passwdfile /home/$USER_NAME/.vncpass
+ps aux | grep -v grep | grep -qF "/noVNC/utils/launch.sh" || start-stop-daemon --start --quiet --pidfile /var/run/noVNC.pid --background --exec /noVNC/utils/launch.sh
 exec /usr/sbin/sshd -D
+
